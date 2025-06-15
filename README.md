@@ -25,6 +25,8 @@ If you like the model but need to scale or tune it for higher accuracy, check ou
 - Watermarked outputs
 - Easy voice conversion script
 - [Outperforms ElevenLabs](https://podonos.com/resembleai/chatterbox)
+- Smart artifact cleaning with pause protection
+- Support for custom pause tags `[pause:xx]`
 
 # Tips
 - **General Use (TTS and Voice Agents):**
@@ -57,6 +59,15 @@ ta.save("test-1.wav", wav, model.sr)
 AUDIO_PROMPT_PATH = "YOUR_FILE.wav"
 wav = model.generate(text, audio_prompt_path=AUDIO_PROMPT_PATH)
 ta.save("test-2.wav", wav, model.sr)
+
+# 使用伪影清理功能
+wav = model.generate(
+    text="Hello[pause:0.5s]world!",  # 支持[pause:xx]标签添加停顿
+    use_auto_editor=True,            # 启用伪影清理
+    ae_threshold=0.06,               # 音量阈值(0-1)
+    ae_margin=0.2                    # 边界保护时间(秒)
+)
+ta.save("test-3.wav", wav, model.sr)
 ```
 See `example_tts.py` and `example_vc.py` for more examples.
 
